@@ -56,22 +56,24 @@ public class Main {
 
     //task8
 
-    static void checkDate(int date){
-        if (date % 4 == 0){
-            if (date % 100 == 0){
-                if (date % 400 == 0){
-                    System.out.println(date + " год является високосным");
+    static void checkDate(int year){
+        String yearIsLeap = year + " год является високосным";
+        String yearIsNotLeap = year + " год не является високосным";
+        if (year % 4 == 0){
+            if (year % 100 == 0){
+                if (year % 400 == 0){
+                    System.out.println(yearIsLeap);
                 }
                 else {
-                    System.out.println(date + " год не является високосным");
+                    System.out.println(yearIsNotLeap);
                 }
             }
             else {
-                System.out.println(date + " год является високосным");
+                System.out.println(yearIsLeap);
             }
         }
         else {
-            System.out.println(date + " год не является високосным");
+            System.out.println(yearIsNotLeap);
         }
     }
 }
