@@ -15,15 +15,12 @@ public class Server {
     private DataOutputStream out;
     private Scanner scanner;
 
-    private boolean isClientActive;
-
     public Server() {
         try {
             this.server = new ServerSocket(PORT);
             System.out.println("Сервер запущен и ожидает подключение");
             this.socket = server.accept();
             System.out.println("Клиент подключился");
-            isClientActive = true;
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
 
@@ -41,7 +38,6 @@ public class Server {
                     String clientsMsg = in.readUTF();
                     if (clientsMsg.equals("/end")) {
                         System.out.println("Клиент ввел стоп-слово)");
-                        isClientActive = false;
                         break;
                     }
                     System.out.println("Клиент: " + clientsMsg);
@@ -53,7 +49,7 @@ public class Server {
 
         //поток отслеживания сканнера и отправки сообщений
         Thread outThread = new Thread(() -> {
-            while (isClientActive){
+            while (true){
                 try {
                     out.writeUTF(scanner.nextLine());
                 } catch (IOException e) {
@@ -61,12 +57,12 @@ public class Server {
                 }
             }
         });
+        outThread.setDaemon(true);
 
         inThread.start();
         outThread.start();
         try {
             inThread.join();
-            outThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
